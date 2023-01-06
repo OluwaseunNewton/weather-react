@@ -5,9 +5,15 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Hello World</h1>
+        <h1>Weather App</h1>
         <Weather />
       </header>
+      <div>
+        <a href="https://github.com/OluwaseunNewton/weather-react">
+          Open-source code
+        </a>
+        , by Oluwaseun Newton
+      </div>
     </div>
   );
 }
