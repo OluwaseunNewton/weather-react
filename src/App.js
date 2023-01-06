@@ -1,21 +1,26 @@
 import "./App.css";
 import Weather from "./Weather";
 
-function App() {
+export default function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Weather App</h1>
-        <Weather />
-      </header>
-      <div>
-        <a href="https://github.com/OluwaseunNewton/weather-react">
-          Open-source code
+      <h1>Weather App</h1>
+      <Weather />
+      <br />
+      <br />
+      <br />
+      <hr />
+      <p>
+        This code is{" "}
+        <a
+          href="https://github.com/OluwaseunNewton/weather-react"
+          target="_blank"
+          rel="noreferrer"
+        >
+          open-source
         </a>
-        , by Oluwaseun Newton
-      </div>
+        , created by Oluwaseun Newton 🤠
+      </p>
     </div>
   );
 }
-
-export default App;

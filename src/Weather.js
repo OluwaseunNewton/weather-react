@@ -2,58 +2,60 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function Weather() {
-  const [inputcity, setCity] = useState("");
-  const [flag, setFlag] = useState(false);
+  // create temp state
+  let [city, setCity] = useState("");
+  let [temperature, setTemperature] = useState(null);
+  let [humidity, setHumidity] = useState(null);
+  let [description, setDescription] = useState(null);
+  let [wind, setWind] = useState(null);
+  let [icon, setIcon] = useState(null);
 
-  const [temp, setTemp] = useState(null);
-  const [description, setDescription] = useState(null);
-  const [humidity, setHumidity] = useState(null);
-  const [wind, setWind] = useState(null);
-  const [icon, setIcon] = useState(null);
-  let form = (
-    <form onSubmit={handleSearch}>
-      <input type="search" placeholder="Enter a city.." onChange={upDateCity} />
-      <input type="submit" value="Search" />
-    </form>
-  );
+  // axios function
+  function showTemperature(response) {
+    console.log("response", response);
+    setTemperature(Math.round(response.data.main.temp));
+    setHumidity(response.data.main.humidity);
+    setDescription(response.data.weather[0].description);
+    setWind(response.data.wind.speed);
+    let iconCode = response.data.weather[0].icon;
+    setIcon(`http://openweathermap.org/img/wn/${iconCode}@2x.png`);
+  }
 
-  function upDateCity(event) {
+  // form function
+  function handleSubmit(event) {
+    event.preventDefault();
+    // axios info
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=3a94f3778290bfeee61278505dbbe51d&units=metric`;
+    axios.get(url).then(showTemperature);
+  }
+
+  // city function
+  function updateCity(event) {
     setCity(event.target.value);
   }
 
-  function handleSearch(event) {
-    event.preventDefault();
-    let urlApi = `https://api.shecodes.io/weather/v1/current?query=${inputcity}&key=4e3d43265f7f3448fot5bf7a6b40260b&units=metric`;
-    axios.get(urlApi).then(handleResponse);
-  }
-
-  function handleResponse(response) {
-    setTemp(response.data.temperature.current);
-    setDescription(response.data.condition.description);
-    setHumidity(response.data.temperature.humidity);
-    setWind(response.data.wind.speed);
-    setIcon(
-      `http://shecodes-assets.s3.amazonaws.com/api/weather/icons/${response.data.condition.icon}.png`
-    );
-    setFlag(true);
-  }
-
-  if (flag) {
-    return (
-      <div>
-        {form}
+  //need a search bar and button
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Search for a city"
+          onChange={updateCity}
+        />
+        <input type="submit" />
+      </form>
+      {temperature ? (
         <ul>
-          <li>Temperature: {Math.round(temp)}</li>
+          <li>Temperature: {temperature}°C</li>
           <li>Description: {description}</li>
-          <li>Humidity: {humidity} %</li>
-          <li>Wind: {wind} km/h</li>
+          <li>Humidity: {humidity}</li>
+          <li>Wind: {wind} km/hr</li>
           <li>
-            <img src={icon} alt="icon"></img>{" "}
+            <img src={icon} alt="weatherIcon" />
           </li>
         </ul>
-      </div>
-    );
-  } else {
-    return <div>{form}</div>;
-  }
+      ) : null}
+    </div>
+  );
 }
